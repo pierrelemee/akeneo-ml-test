@@ -1,0 +1,30 @@
+name: "unit-test"
+on:
+  - pull_request
+
+jobs:
+  test:
+    name: Run unit tests
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run unit tests
+        run: |
+          pytest --junitxml=test-report.xml
+        env:
+          FOO: bar
+
+      - name: Surface failing tests
+        if: always()
+        uses: pmeier/pytest-results-action@main
+        with:
+          path: test-report.xml

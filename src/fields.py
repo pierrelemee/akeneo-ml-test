@@ -3,6 +3,7 @@ import os
 
 from pydantic import TypeAdapter, BaseModel
 
+
 class Field(BaseModel):
     name: str
     multiple: bool
