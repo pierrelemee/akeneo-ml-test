@@ -29,6 +29,6 @@ class TestAPI:
         res = response.json()
 
         # Known product should be matched
-        assert res["EF001438"] == "longueur (cm)"
+        assert res["EF001438"] == "Answer LLaMA"
         # Unknown product should remain unmatched
         assert res["EF999999"] is None
