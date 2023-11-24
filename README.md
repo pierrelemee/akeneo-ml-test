@@ -22,7 +22,12 @@ To get started, you'll have to install dependencies:
 pip install -r requirements.txt
 ```
 
-You can now try it out:
+Then run the web server:
+```bash
+uvicorn web:app
+```
+
+You can now try it out from the [Swagger UI](http://127.0.0.1:8000/docs) or from the terminal using cURL:
 
 ```bash
 curl -X 'POST' \
@@ -57,7 +62,7 @@ query, e.g. `system_prompt` and `user_message`
 
 The Product field lookup API is designed to be easily configurable. The core configuration must be declared in a
 dedicated Python module file that will be imported ad startup. This module can be overriden with the `CONFIG_MODULE`
-environment variable. By default, the [`config` module](./config.py) is used.
+environment variable. By default, the [`config` module](config/example.py) is used.
 
 Here's how should it looks like:
 
@@ -68,6 +73,11 @@ def get_llama2():
 
 async def get_camellm():
     return MyCameLLM(MyCameLLMConnector(), MyChainOfThoughts())
+```
+
+You can define environment variables either by _exporting_ them or at run:
+```bash
+CONFIG_MODULE=config.myconfig uvicorn web:app
 ```
 
 You can find some _ready for use_ implementations of each type in `src.models.llms`, `src.models.chain_of_thoughts` and
@@ -113,7 +123,7 @@ done with [feature flags](https://launchdarkly.com/blog/what-are-feature-flags/)
 - [x] Write a first unit tests and automatize CI
 - [x] Define model classes and plug a basic LLM query workflow
 - [x] Make LLaMA& & CameLL logic configurable
-- [ ] Test LLaMA2 with Replicate
+- [x] Test LLaMA2 with Replicate
 - [ ] Prompt length management
 - [ ] Multi threading
 - [ ] Timeout management

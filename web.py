@@ -11,7 +11,9 @@ from src.services.field import FieldManager
 from src.models.llms import AbstractLLM
 
 
-config = importlib.import_module(os.getenv("CONFIG_MODULE", "config"))
+config = importlib.import_module(os.getenv("CONFIG_MODULE", "config.example"))
+
+print(config)
 
 if not hasattr(config, "get_llama2") or not callable(config.get_llama2):
     raise Exception("Missing configuration for llama2")
@@ -31,7 +33,7 @@ async def index(
     camellm: Annotated[AbstractLLM, Depends(config.get_camellm)],
 ):
     res = {}
-    llm = llama2 if query.llm == LLMType.llama2 else camellm
+    llm = llama2 if query.llm == LLMType.LLAMA else camellm
     for field in query.fields:
         if (target := field_manager.get_field(field)) is not None:
             res[field] = llm.lookup_field_description(target, query.description)

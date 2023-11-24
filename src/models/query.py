@@ -7,5 +7,5 @@ from src.models.llms import LLMType
 
 class ProductFieldsLookupQuery(BaseModel):
     description: str
-    llm: LLMType = LLMType.camellm
+    llm: LLMType = LLMType.CAMELLM
     fields: List[str]

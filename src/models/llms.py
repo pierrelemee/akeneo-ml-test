@@ -7,8 +7,8 @@ from src.models.product import Field
 
 
 class LLMType(Enum):
-    llama2 = "llama2"
-    camellm = "camellm"
+    LLAMA = "llama2"
+    CAMELLM = "camellm"
 
 
 class AbstractLLM(ABC):
@@ -25,10 +25,23 @@ class AbstractLLM(ABC):
         chain_of_thoughts: AbstractChainOfThoughts,
     ):
         super().__init__()
+
+        if not connector.supprts(self.get_type()):
+            raise Exception(
+                f"Unsupported connector ${type(connector)} for LLM type ${self.get_type().name}"
+            )
+
         self._connector = connector
         self._chain_of_thoughts = chain_of_thoughts
 
+    @abstractmethod
+    def get_type(self) -> LLMType:
+        pass
+
     def lookup_field_description(self, field: Field, description: str) -> str:
+        if not self._connector.is_valid():
+            return None
+
         system_prompt, user_message = self._chain_of_thoughts.build_query(
             field, description
         )
@@ -48,6 +61,9 @@ class AbstractLLM(ABC):
 
 
 class LLaMA(AbstractLLM):
+    def get_type(self) -> LLMType:
+        return LLMType.LLAMA
+
     def build_query(self, system_prompt: str, user_message: str) -> str:
         # TODO: ensure built query doesn't exceed 4096 characters
         return f"""
@@ -60,6 +76,9 @@ ${system_prompt}
 
 
 class CameLLM(AbstractLLM):
+    def get_type(self) -> LLMType:
+        return LLMType.CAMELLM
+
     def build_query(self, system_prompt: str, user_message: str) -> str:
         # TODO: ensure built query doesn't exceed 2048 characters
         return f"""

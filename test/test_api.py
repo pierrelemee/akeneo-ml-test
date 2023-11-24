@@ -11,7 +11,7 @@ class TestAPI:
         Test POST http calls to the `/api/product/fields/lookup`, expecting successful output
         :return:
         """
-        from main import app
+        from web import app
 
         client = TestClient(app)
 
