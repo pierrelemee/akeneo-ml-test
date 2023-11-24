@@ -125,7 +125,7 @@ done with [feature flags](https://launchdarkly.com/blog/what-are-feature-flags/)
 - [x] Make LLaMA& & CameLL logic configurable
 - [x] Test LLaMA2 with Replicate
 - [x] Prompt length management
-- [ ] Multi threading
+- [x] Multi threading
 - [ ] Timeout management
 - [ ] Few shots in prompt using known examples (require ORM setup)
 
