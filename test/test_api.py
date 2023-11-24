@@ -1,10 +1,4 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from main import app
-
-
-client = TestClient(app)
 
 
 class TestAPI:
@@ -17,6 +11,10 @@ class TestAPI:
         Test POST http calls to the `/api/product/fields/lookup`, expecting successful output
         :return:
         """
+        from main import app
+
+        client = TestClient(app)
+
         response = client.post(
             "/api/product/fields/lookup",
             json={
