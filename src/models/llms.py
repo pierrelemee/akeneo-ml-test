@@ -39,13 +39,25 @@ class AbstractLLM(ABC):
         pass
 
     def lookup_field_description(self, field: Field, description: str) -> str:
+        """
+        Looks up for product field description by:
+        * building the LLM query through the CoT
+        * fetching the output of the query through the connector
+        * processing the result through the CoT
+
+        :param field:
+        :param description:
+        :return:
+        """
         if not self._connector.is_valid():
             return None
 
         system_prompt, user_message = self._chain_of_thoughts.build_query(
             field, description
         )
-        return self._connector.query(self.build_query(system_prompt, user_message))
+        return self._chain_of_thoughts.process_output(
+            self._connector.query(self.build_query(system_prompt, user_message))
+        )
 
     @abstractmethod
     def build_query(self, system_prompt: str, user_message: str) -> str:
@@ -57,34 +69,45 @@ class AbstractLLM(ABC):
 
         :return: the output as string
         """
-        pass
 
 
 class LLaMA(AbstractLLM):
+    TEMPLATE = "[INST] <<SYS>>{0}<</SYS>> {1} [/INST]"
+    MAX_LENGTH = 4096
+
     def get_type(self) -> LLMType:
         return LLMType.LLAMA
 
     def build_query(self, system_prompt: str, user_message: str) -> str:
-        # TODO: ensure built query doesn't exceed 4096 characters
-        return f"""
-[INST] <<SYS>>
-${system_prompt}
-<</SYS>>
-
-{user_message} [/INST]
-"""
+        return self.TEMPLATE.format(
+            # Truncate system prompt to only ensure built query is shorter than the max length
+            system_prompt[
+                : self.MAX_LENGTH
+                - (len(self.TEMPLATE.format("", "")) + len(user_message))
+            ],
+            user_message,
+        )
 
 
 class CameLLM(AbstractLLM):
+    TEMPLATE = """
+[INST] <<SYS>>
+{0}
+<</SYS>>
+
+{1} [/INST]
+"""
+    MAX_LENGTH = 2048
+
     def get_type(self) -> LLMType:
         return LLMType.CAMELLM
 
     def build_query(self, system_prompt: str, user_message: str) -> str:
-        # TODO: ensure built query doesn't exceed 2048 characters
-        return f"""
-[INST] <<SYS>>
-${system_prompt}
-<</SYS>>
-
-{user_message} [/INST]
-"""
+        return self.TEMPLATE.format(
+            # Truncate system prompt to only ensure built query is shorter than the max length
+            system_prompt[
+                : self.MAX_LENGTH
+                - (len(self.TEMPLATE.format("", "")) + len(user_message))
+            ],
+            user_message,
+        )

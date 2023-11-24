@@ -124,7 +124,7 @@ done with [feature flags](https://launchdarkly.com/blog/what-are-feature-flags/)
 - [x] Define model classes and plug a basic LLM query workflow
 - [x] Make LLaMA& & CameLL logic configurable
 - [x] Test LLaMA2 with Replicate
-- [ ] Prompt length management
+- [x] Prompt length management
 - [ ] Multi threading
 - [ ] Timeout management
 - [ ] Few shots in prompt using known examples (require ORM setup)

@@ -6,7 +6,8 @@ from src.models.product import Field
 
 class AbstractChainOfThoughts(ABC):
     """
-    A ChainOfThought builds the LLM query (system prompt and user message) given the context of a product field lookup.
+    A ChainOfThought builds the LLM query (system prompt and user message) given the context of a product field lookup,
+    and extracts data from the output.
 
     The context is made of:
     * a Field instance (name, type, label, options, multiple)
@@ -23,6 +24,15 @@ class AbstractChainOfThoughts(ABC):
         :return:
         """
         pass
+
+    def process_output(self, output: str):
+        """
+        Processes the output and return relevant data.
+
+        :param output:
+        :return: a list, object, string, number or even None
+        """
+        return output
 
 
 class BasicChainOfThoughts(AbstractChainOfThoughts):
