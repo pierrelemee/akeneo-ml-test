@@ -4,27 +4,40 @@ import os
 from pydantic import TypeAdapter
 
 from src.models.product import Field
+from abc import ABC, abstractmethod
 
 
-class FieldManager:
+class FieldManager(ABC):
     """
-    Service class capable of fetching data about a known field.
+    Abstract service class capable of fetching data about a known field.
+    """
+
+    @abstractmethod
+    def get_field(self, name: str) -> Optional[Field]:
+        pass
+
+
+class JsonFileFieldManager(FieldManager):
+    """
+    Implementation of FieldManager reading data from a static JSON file.
     """
 
     # In memory database
-    # TODO: use an actual database instead
-    _fields: Dict[str, Field]
+    _fields: Dict[str, Field] = None
 
-    def __init__(self):
-        # Load field knowledge base from json file
-        # TODO: handle file issues (existence, permission, format)
-        with open(self.__get_fields_file_path()) as file:
-            self._fields = {
-                field.name: field
-                for field in TypeAdapter(List[Field]).validate_json(file.read())
-            }
+    def _load_database(self):
+        # If database hasn't been initialized yet
+        if self._fields is None:
+            # Load field database from json file
+            with open(self.__get_fields_file_path()) as file:
+                self._fields = {
+                    field.name: field
+                    for field in TypeAdapter(List[Field]).validate_json(file.read())
+                }
 
     def get_field(self, name: str) -> Optional[Field]:
+        self._load_database()
+
         return self._fields.get(name)
 
     @staticmethod

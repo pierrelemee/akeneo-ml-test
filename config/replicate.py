@@ -11,9 +11,9 @@ from src.models.chain_of_thoughts import BasicChainOfThoughts
 from src.models.llms import LLaMA, CameLLM
 
 
-async def get_llama2():
+def get_llama2():
     return LLaMA(ReplicateLLaMAConnector(), BasicChainOfThoughts())
 
 
-async def get_camellm():
+def get_camellm():
     return CameLLM(DumbCameLLMConnector(), BasicChainOfThoughts())
