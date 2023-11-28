@@ -8,6 +8,8 @@ Test ML Software Engineer @ Akeneo
 
 This app is designed to work with Python 3.11+.
 
+### Natively
+
 If you prefer to run the app in an isolated environment, you can setup [`virtualenv`](https://virtualenv.pypa.io/en/latest/)
 first:
 
@@ -42,6 +44,33 @@ curl -X 'POST' \
   ]
 }'
 
+```
+
+### Using docker compose
+
+Thanks to Docker compose you can start a container and 3rd parties dependencies really quickly.
+
+```bash
+# Create your own .env file based on the distributed example:
+cp .env.dist .env
+docker compose build
+docker compose up -d
+```
+
+## Database preparation
+
+Before requesting data, you have to ensure database is up-to-date and provisioned.
+
+First, create tables by running migrations:
+
+```bash
+pw_migrate migrate --database $DATABASE_URL
+```
+
+Then you can provision the `fields` and `field_values` tables from the raw JSON files in the `data/` directory:
+
+```bash
+python ./cli.py
 ```
 
 ## Core concepts
@@ -111,6 +140,13 @@ is used (recommended by `fastapi`)
 
 It took me some extra time to discover this new framework, but I'm glad to play with it and I wish I knew it before :)
 
+Additionally, I chose to use the [Peewee ORM](http://docs.peewee-orm.com/en/latest/), for its strong inspiration of the Django ORM with the active record
+approach. I used a PostgreSQL database and preferred to switch to Docker compose to ease the setup. And I rely on
+[`peewee-migration`](https://github.com/klen/peewee_migrate).
+
+And for the command-line utilities, I chose [`typer`](https://typer.tiangolo.com/) by the same author than FastAPI and
+which offers great features.
+
 Even if it seems obvious that queries to LLMs are mostly done via an HTTP query, I chose to use the _connector_ system.
 This allows, among other benefits, to use plain Python code in a testing purpose. In a general consideration, I sense
 there are many ways to "fine tune" the queries to both LLMs given the product / fields context. For this reason I
@@ -127,6 +163,6 @@ done with [feature flags](https://launchdarkly.com/blog/what-are-feature-flags/)
 - [x] Prompt length management
 - [x] Multi threading
 - [x] Timeout management
-- [ ] Few shots in prompt using known examples (require ORM setup)
+- [x] Few shots in prompt using known examples (require ORM setup)
 
 

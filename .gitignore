@@ -3,3 +3,4 @@ venv/
 !config/exemple.py
 !config/*.py
 .env
+.docker/postgres/data/
