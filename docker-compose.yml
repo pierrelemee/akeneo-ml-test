@@ -1,0 +1,29 @@
+version: "3.9"
+
+name: "akeneo-ml-test"
+services:
+  postgres:
+    image: postgres:15.2-alpine
+    environment:
+      - POSTGRES_USER=akeneroot
+      - POSTGRES_PASSWORD=akeneroot
+      - POSTGRES_MULTIPLE_DATABASES=akeneo,akenetest
+    volumes:
+      - ./.docker/postgres/scripts/:/docker-entrypoint-initdb.d
+      # Data directory (to wipe DB data, flush by removing its content)
+      - ./.docker/postgres/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      dockerfile: ./.docker/python.dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: bash -c "cd /app && pip install -r requirements.txt -r requirements-dev.txt && uvicorn --host=0.0.0.0 --reload web:app"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres

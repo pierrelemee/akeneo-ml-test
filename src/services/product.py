@@ -5,17 +5,23 @@ from typing import Annotated, Callable, Dict
 
 from fastapi import Depends
 
-from src.models.llms import AbstractLLM
-from src.models.product import Field
-from src.models.query import ProductFieldsLookupQuery
-from src.services.field import FieldManager, JsonFileFieldManager
+from src.llm.llms import AbstractLLM
+from src.models import ProductField
+from src.dtos.query import ProductFieldsLookupQuery
+from src.services.field import (
+    ProductFieldManager,
+    DatabaseProductFieldManager,
+)
 
 
 class ProductLookupManager:
-    _field_manager: FieldManager
+    _field_manager: ProductFieldManager
 
     def __init__(
-        self, field_manager: Annotated[FieldManager, Depends(JsonFileFieldManager)]
+        self,
+        field_manager: Annotated[
+            ProductFieldManager, Depends(DatabaseProductFieldManager)
+        ],
     ):
         super().__init__()
         self._field_manager = field_manager
@@ -60,7 +66,7 @@ class ProductLookupManager:
     def lookup_product_field(
         self,
         description: str,
-        field: Field,
+        field: ProductField,
         get_llm: Callable[[], AbstractLLM],
     ):
         llm: AbstractLLM = get_llm()

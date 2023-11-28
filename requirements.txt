@@ -3,3 +3,7 @@ pydantic==2.5.1
 uvicorn==0.24.0.post1
 httpx==0.25.1
 replicate==0.21
+peewee
+Peewee-Migrate>=1.12.1
+typer==0.9.0
+

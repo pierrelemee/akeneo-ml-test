@@ -1,4 +1,11 @@
+import os
+from typing import List
+
+import pytest
+
 from fastapi.testclient import TestClient
+
+from src.models import ProductField
 
 
 class TestAPI:
@@ -6,11 +13,21 @@ class TestAPI:
     Test http calls to the FastAPI app.
     """
 
-    def test_lookup_product_fields_success(self):
+    @pytest.fixture
+    def input_fields(self):
+        ProductField.get_or_create(
+            name="EF001438", multiple=False, label="longueur (cm)", type="number"
+        )
+
+        return ["EF001438", "EF999999"]
+
+    def test_lookup_product_fields_success(self, input_fields: List[str]):
         """
         Test POST http calls to the `/api/product/fields/lookup`, expecting successful output
         :return:
         """
+        os.environ["CONFIG_MODULE"] = "config.example"
+
         from web import app
 
         client = TestClient(app)
@@ -20,7 +37,7 @@ class TestAPI:
             json={
                 "description": "Baignoire d'angle Geberit Bastia: 142x142cm",
                 "llm": "llama2",
-                "fields": ["EF001438", "EF999999"],
+                "fields": input_fields,
             },
         )
         assert response.status_code == 200

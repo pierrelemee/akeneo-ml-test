@@ -2,13 +2,12 @@
 Override this file in production to define to use different LLMs,
 with specific connectors & chain of thoughts
 """
-from src.models.connectors import (
+from src.llm.connectors import (
     DumbCameLLMConnector,
-    DumbLLaMAConnector,
     ReplicateLLaMAConnector,
 )
-from src.models.chain_of_thoughts import BasicChainOfThoughts
-from src.models.llms import LLaMA, CameLLM
+from src.llm.chain_of_thoughts import BasicChainOfThoughts
+from src.llm.llms import LLaMA, CameLLM
 
 
 def get_llama2():

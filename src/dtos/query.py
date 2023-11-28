@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from src.models.llms import LLMType
+from src.llm.llms import LLMType
 
 
 class ProductFieldsLookupQuery(BaseModel):
