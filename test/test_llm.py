@@ -1,6 +1,6 @@
-from src.models.chain_of_thoughts import BasicChainOfThoughts
-from src.models.connectors import DumbLLaMAConnector, DumbCameLLMConnector
-from src.models.llms import LLaMA, CameLLM
+from src.llm.chain_of_thoughts import BasicChainOfThoughts
+from src.llm.connectors import DumbLLaMAConnector, DumbCameLLMConnector
+from src.llm.llms import LLaMA, CameLLM
 
 
 class TestLLaMA:

@@ -5,8 +5,8 @@ from typing import Annotated
 
 from fastapi import FastAPI, Depends
 
-from src.models.query import ProductFieldsLookupQuery
-from src.models.llms import LLMType
+from src.dtos.query import ProductFieldsLookupQuery
+from src.llm.llms import LLMType
 from src.services.product import ProductLookupManager
 
 config = importlib.import_module(os.getenv("CONFIG_MODULE", "config.example"))

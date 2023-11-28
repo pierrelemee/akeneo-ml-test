@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-from src.models.product import Field
+from src.models import ProductField
 
 
 class AbstractChainOfThoughts(ABC):
@@ -16,7 +16,7 @@ class AbstractChainOfThoughts(ABC):
     """
 
     @abstractmethod
-    def build_query(self, field: Field, description: str) -> Tuple[str, str]:
+    def build_query(self, field: ProductField, description: str) -> Tuple[str, str]:
         """
 
         :param field:
@@ -42,7 +42,7 @@ class BasicChainOfThoughts(AbstractChainOfThoughts):
     Based on the given example.
     """
 
-    def build_query(self, field: Field, description: str) -> Tuple[str, str]:
+    def build_query(self, field: ProductField, description: str) -> Tuple[str, str]:
         return (
             "Tu es un assistant qui m'aide à extraire des valeurs depuis un produit.",
             f"""

@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
-from src.models.chain_of_thoughts import AbstractChainOfThoughts
-from src.models.connectors import AbstractLLMConnector
-from src.models.product import Field
+from src.llm.chain_of_thoughts import AbstractChainOfThoughts
+from src.llm.connectors import AbstractLLMConnector
+from src.models import ProductField
 
 
 class LLMType(Enum):
@@ -38,7 +38,7 @@ class AbstractLLM(ABC):
     def get_type(self) -> LLMType:
         pass
 
-    def lookup_field_description(self, field: Field, description: str) -> str:
+    def lookup_field_description(self, field: ProductField, description: str) -> str:
         """
         Looks up for product field description by:
         * building the LLM query through the CoT
