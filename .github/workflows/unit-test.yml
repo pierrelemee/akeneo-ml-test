@@ -34,16 +34,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements-dev.txt
 
+      - name: Install psycopg2
+        run: pip install psycopg2-binary
+
       - name: Run migrations
         run: pw_migrate  migrate --database $DATABASE_URL
         env:
-          DATABASE_URL: postgres://akenetest:akenetest@postgres:5432/akenetest
+          DATABASE_URL: postgres://akenetest:akenetest@localhost:5432/akenetest
 
       - name: Run unit tests
         run: |
           pytest --junitxml=test-report.xml
         env:
-          FOO: bar
+          DATABASE_URL: postgres://akenetest:akenetest@localhost:5432/akenetest
+          CONFIG_MODULE: config.example
 
       - name: Surface failing tests
         if: always()
