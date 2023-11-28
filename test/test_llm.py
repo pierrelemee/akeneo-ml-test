@@ -3,7 +3,7 @@ from src.llm.connectors import DumbLLaMAConnector, DumbCameLLMConnector
 from src.llm.llms import LLaMA, CameLLM
 
 
-class TestLLaMA:
+class TestAbstractLLM:
     """
     Test AbstractLLM operations.
     """

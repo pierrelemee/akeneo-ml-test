@@ -51,3 +51,18 @@ Attribut : {field.name}
 Options : ${', '.join(field.options if field.options is not None else [])}
 """,
         )
+
+
+class ContextualChainOfThoughts(AbstractChainOfThoughts):
+    """
+    Builds a query giving some context to the LLM: you're an expert in household appliances who already gave
+    relevant answers.
+
+    This can be achieved by fetching the first ProductFieldValues related to the given ProductField.
+    """
+
+    def build_query(self, field: ProductField, description: str) -> Tuple[str, str]:
+        return (
+            f'Tu es un expert en électroménager. Quand on t\'as demandé la valeur de la propriété "{field.label}" sur un produit dont la description est "{field.values[0].context}" tu as répondu {field.values[0].value}.',
+            f'Quelle est la valeur de la propriété "{field.label}" pour le produit dont la description est la suivante "{description}" ?',
+        )
