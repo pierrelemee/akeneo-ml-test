@@ -7,6 +7,23 @@ jobs:
     name: Run unit tests
 
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: akenetest
+          POSTGRES_NAME: akenetest
+          POSTGRES_HOST: postgres
+          POSTGRES_PASSWORD: akenetest
+          POSTGRES_PORT: 5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,6 +33,11 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run migrations
+        run: pw_migrate  migrate --database $DATABASE_URL
+        env:
+          DATABASE_URL: postgres://akenetest:akenetest@postgres:5432/akenetest
 
       - name: Run unit tests
         run: |

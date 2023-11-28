@@ -11,7 +11,6 @@ app = typer.Typer()
 @app.command()
 def load_data():
     # Load field database from json file
-    field_names = []
     with open(os.path.join(os.path.dirname(__file__), "./data/fields.json")) as file:
         fields = json.loads(file.read())
         ProductField.truncate_table(restart_identity=True, cascade=True)
