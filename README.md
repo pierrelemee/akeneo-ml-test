@@ -135,8 +135,7 @@ project:
 * serialization via `pydantic` (embedded): quickly and easily transform object to JSON and inversely
 * dependency injection: define external service classes and let the framework do the invocation and wiring. Here it also
 brings the ability to do [_depenceny inversion_](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
-* ORM: connect to an external database simply while using simple domain objects. Here [`sqlalchemy`](https://www.sqlalchemy.org/)
-is used (recommended by `fastapi`)
+* ORM: connect to an external database simply while using simple domain objects
 
 It took me some extra time to discover this new framework, but I'm glad to play with it and I wish I knew it before :)
 
